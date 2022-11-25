@@ -3,7 +3,7 @@ import { galleryItems } from "./gallery-items.js";
 const imagesContainer = document.querySelector(".gallery");
 const getItemMarkup = ({ preview, original, description }) => `
   <div class="gallery__item">
-    <a class="gallery__link" href="large-image.jpg">>
+    <a class="gallery__link" href="large-image.jpg">
       <img
         class="gallery__image"
         src="${preview}"
