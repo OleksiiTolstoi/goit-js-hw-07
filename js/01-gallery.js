@@ -1,9 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 const imagesContainer = document.querySelector(".gallery");
-
-console.log(galleryItems);
-
 const getItemMarkup = ({ preview, original, description }) => `
   <div class="gallery__item">
     <a class="gallery__link" href="large-image.jpg">>
@@ -16,43 +13,24 @@ const getItemMarkup = ({ preview, original, description }) => `
     </a>
   </div>
 `;
-const getBigImgMarkup = ({ url, description }) => `
-  <img
-    class="gallery__image"
-    src="${url}"
-    width="1280"
-    alt="${description}"/>
-// `;
-const getImagesMarkup = (images) =>
-  images.map((it) => getItemMarkup(it)).join("");
-imagesContainer.innerHTML = getImagesMarkup(galleryItems);
-imagesContainer.addEventListener("click", onClickGallery);
+const getElementsMarkup = galleryItems.map(getItemMarkup).join("");
+imagesContainer.insertAdjacentHTML("beforeend", getElementsMarkup);
+imagesContainer.addEventListener("click", onTopClick);
 
-function onClickGallery(e) {
+function onTopClick(e) {
   e.preventDefault();
-  const link = e.target.closest(".gallery__link");
-  const img = link?.querySelector(".gallery__image");
+  if (!e.target.classList.contains("gallery__image")) {
+    return;
+  }
+  const instance = basicLightbox.create(`
+    <img src="${e.target.dataset.source}" width="800" height="600">
+`);
 
-  if (!(link && img)) return;
-  const {
-    alt: description,
-    dataset: { source: url },
-  } = img;
-
-  showBigImg(getBigImgMarkup({ url, description }));
-}
-
-function showBigImg(markup) {
-  const instance = window.basicLightbox.create(markup);
   instance.show();
 
-  window.addEventListener("keydown", onKeyDownEsc.bind(instance), {
-    once: true,
+  imagesContainer.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      instance.close();
+    }
   });
-}
-
-function onKeyDownEsc(e) {
-  if (e.key !== "Escape") return;
-  this.close();
-  console.log(e.key);
 }
