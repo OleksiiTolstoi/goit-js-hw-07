@@ -26,15 +26,14 @@ function onTopClick(e) {
   const instance = basicLightbox.create(
     `<img src="${e.target.dataset.source}" width="800" height="600">`,
     {
-      onShow: (instance) => {
-        window.addEventListener("keydown", onEscapeButton);
+      onShow: () => {
+        document.addEventListener("keydown", onEscapeButton);
       },
-      onClose: (instance) => {
-        window.removeEventListener("keydown", onEscapeButton);
+      onClose: () => {
+        document.removeEventListener("keydown", onEscapeButton);
       },
     }
   );
-
   instance.show();
   function onEscapeButton(evt) {
     if (evt.key === "Escape") {
@@ -42,4 +41,3 @@ function onTopClick(e) {
     }
   }
 }
-console.log(galleryItems);
