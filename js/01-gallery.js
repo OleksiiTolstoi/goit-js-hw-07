@@ -1,5 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
+
 const imagesContainer = document.querySelector(".gallery");
 const getItemMarkup = ({ preview, original, description }) => `
   <div class="gallery__item">
@@ -22,15 +23,23 @@ function onTopClick(e) {
   if (!e.target.classList.contains("gallery__image")) {
     return;
   }
-  const instance = basicLightbox.create(`
-    <img src="${e.target.dataset.source}" width="800" height="600">
-`);
+  const instance = basicLightbox.create(
+    `<img src="${e.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: (instance) => {
+        window.addEventListener("keydown", onEscapeButton);
+      },
+      onClose: (instance) => {
+        window.removeEventListener("keydown", onEscapeButton);
+      },
+    }
+  );
 
   instance.show();
-
-  imagesContainer.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
+  function onEscapeButton(evt) {
+    if (evt.key === "Escape") {
       instance.close();
     }
-  });
+  }
 }
+console.log(galleryItems);
